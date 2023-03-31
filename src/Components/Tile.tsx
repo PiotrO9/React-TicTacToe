@@ -1,4 +1,6 @@
-function Tile({id, TileClick, content}: TileProps) {
+import ITileProps from "../Models/ITileProps"
+
+function Tile({id, TileClick, content}: ITileProps) {
     return (
         <div className="Tile" onClick={() => {TileClick(id)}}>
             {
@@ -10,12 +12,6 @@ function Tile({id, TileClick, content}: TileProps) {
             }
         </div>
     )
-}
-
-interface TileProps {
-    id: number,
-    TileClick: any,
-    content: string
 }
 
 export default Tile

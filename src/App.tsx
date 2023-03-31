@@ -2,13 +2,15 @@ import { useState } from 'react'
 import './App.scss'
 import Sign from './Models/Sign'
 import Tile from './Components/Tile'
+import checkDrawConditions from './utils/checkDrawConditions'
+import checkWinConditions from './utils/checkWinConditions'
 
 function App() {
   const emptyTilesArr: string[] = ['','','','','','','','','']
-  const [tiles, setTiles] = useState(emptyTilesArr)
-  const [currentSign, setCurrentSign] = useState(Sign.O)
-  const [gameEnded, setGameEnded]= useState(false)
-  const [winner, setWinner] = useState('')
+  const [tiles, setTiles] = useState<string[]>(emptyTilesArr)
+  const [currentSign, setCurrentSign] = useState<Sign>(Sign.O)
+  const [gameEnded, setGameEnded]= useState<boolean>(false)
+  const [winner, setWinner] = useState<string>('')
 
   const handlePlayAgain = (): void => {
     setTiles(emptyTilesArr)
@@ -21,13 +23,12 @@ function App() {
       tiles[id] = currentSign
       changeCurrentSign()
       setTiles([...tiles])
-      
 
-      if(checkWinConditions() ) {
+      if(checkWinConditions(tiles) ) {
         setWinner(currentSign)
         setGameEnded(true)
       }
-      else if(checkDrawConditions()) {
+      else if(checkDrawConditions(tiles)) {
         setGameEnded(true)
       }
     }
@@ -40,52 +41,6 @@ function App() {
     else {
       setCurrentSign(Sign.O)
     }
-  }
-
-  const checkWinConditions = (): boolean => {
-    const rowLenght: number = Math.sqrt(tiles.length)
-
-    for(let i = 0; i < rowLenght; i++) {
-      let helper = i*3
-      if(tiles[0 + helper] == tiles[1 + helper] 
-        && tiles[1 + helper] === tiles[2 + helper]
-        && tiles[2 + helper] !== '') {
-          return true
-        }
-    }
-
-    for(let i = 0; i < rowLenght; i++) {
-      let helper = i*3
-      if(tiles[0 + helper] === tiles[3 + helper]
-        && tiles[3 + helper] === tiles[6 + helper]
-        && tiles[6 + helper] !== '') {
-          return true
-        }
-    }
-
-    if(tiles[0] === tiles[4]
-      && tiles[4] === tiles[8]
-      && tiles[8] !== '') {
-        return true
-      }
-    
-      if(tiles[2] === tiles[4]
-        && tiles[4] === tiles[6]
-        && tiles[6] !== '') {
-          return true
-      }
-
-    return false
-  }
-
-  const checkDrawConditions = (): boolean => {
-    for(let i = 0; i < tiles.length; i++) {
-      if(tiles[i] == '') {
-        return false
-      }
-    }
-
-    return true
   }
 
   return (
